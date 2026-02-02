@@ -53,11 +53,11 @@
         }
 
         .prompt-section {
-            background: var(--warm-gray);
+            background: white;
             padding: 1.5rem;
             border-radius: 16px;
             margin-bottom: 2rem;
-            border-left: 4px solid var(--gentle-green);
+            border: 3px solid #6B9BD1;
         }
 
         .prompt-label {
@@ -128,7 +128,7 @@
         }
 
         .start-button {
-            background: var(--gentle-green);
+            background: #6B9BD1;
             color: white;
             border: none;
             padding: 1rem 3rem;
@@ -142,9 +142,9 @@
         }
 
         .start-button:hover {
-            background: var(--soft-brown);
+            background: #5588c4;
             transform: translateY(-2px);
-            box-shadow: 0 4px 16px rgba(168, 181, 160, 0.4);
+            box-shadow: 0 4px 16px rgba(107, 155, 209, 0.4);
         }
 
         .start-button:disabled {
@@ -158,7 +158,7 @@
             width: 100%;
             min-height: 300px;
             padding: 1.5rem;
-            border: 2px solid var(--warm-gray);
+            border: 3px solid #6B9BD1;
             border-radius: 16px;
             font-family: 'Crimson Pro', serif;
             font-size: 1.125rem;
@@ -171,7 +171,7 @@
 
         textarea:focus {
             outline: none;
-            border-color: var(--gentle-green);
+            border-color: #5588c4;
         }
 
         textarea:disabled {
@@ -260,10 +260,9 @@
         <textarea 
             id="writingArea" 
             placeholder="Start writing here..."
-            maxlength="2000"
             disabled
         ></textarea>
-        <div class="word-count" id="wordCount">0 / 2000 characters</div>
+        <div class="word-count" id="wordCount">0 / 5000 words</div>
 
         <div class="download-section" id="downloadSection">
             <div class="complete-message">Time's up! Great work today.</div>
@@ -298,19 +297,17 @@
 
         // Update word count
         writingArea.addEventListener('input', () => {
-            const length = writingArea.value.length;
-            wordCount.textContent = `${length} / 2000 characters`;
-        });
-        function updateTimerDisplay() {
-            const minutes = Math.floor(timeRemaining / 60);
-            const seconds = timeRemaining % 60;
-            timerDisplay.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            const text = writingArea.value.trim();
+            const words = text === '' ? 0 : text.split(/\s+/).length;
+            wordCount.textContent = `${words} / 5000 words`;
             
-            // Add warning class in last minute
-            if (timeRemaining <= 60) {
-                timerDisplay.classList.add('warning');
+            // Enforce 5000 word limit
+            if (words > 5000) {
+                const wordsArray = text.split(/\s+/);
+                writingArea.value = wordsArray.slice(0, 5000).join(' ');
+                wordCount.textContent = `5000 / 5000 words`;
             }
-        }
+        });
 
         // Start timer
         function startTimer() {
