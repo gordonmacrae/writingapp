@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>10 Minute Writing</title>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@300;400;600&family=Public+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cream: #faf8f5;
+            --warm-gray: #e8e4df;
+            --soft-brown: #8b7d6b;
+            --deep-earth: #5a4a3a;
+            --gentle-green: #a8b5a0;
+            --accent: #d4a574;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Public Sans', sans-serif;
+            background: linear-gradient(135deg, var(--cream) 0%, var(--warm-gray) 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            color: var(--deep-earth);
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 3rem;
+            max-width: 800px;
+            width: 100%;
+            box-shadow: 0 8px 32px rgba(90, 74, 58, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+
+        h1 {
+            font-family: 'Crimson Pro', serif;
+            font-size: 2.5rem;
+            font-weight: 300;
+            color: var(--deep-earth);
+            margin-bottom: 1rem;
+            letter-spacing: -0.5px;
+        }
+
+        .prompt-section {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 16px;
+            margin-bottom: 2rem;
+            border: 3px solid #6B9BD1;
+        }
+
+        .prompt-label {
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--soft-brown);
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .prompt-text {
+            font-family: 'Crimson Pro', serif;
+            font-size: 1.25rem;
+            color: var(--deep-earth);
+            line-height: 1.6;
+        }
+
+        .prompt-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid transparent;
+            border-radius: 12px;
+            font-family: 'Crimson Pro', serif;
+            font-size: 1.25rem;
+            color: var(--deep-earth);
+            background: white;
+            transition: border-color 0.3s ease;
+        }
+
+        .prompt-input:focus {
+            outline: none;
+            border-color: var(--gentle-green);
+        }
+
+        .prompt-input::placeholder {
+            color: var(--soft-brown);
+            opacity: 0.6;
+        }
+
+        .prompt-loading {
+            color: var(--soft-brown);
+            font-style: italic;
+        }
+
+        .timer-section {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .timer {
+            font-family: 'Crimson Pro', serif;
+            font-size: 4rem;
+            font-weight: 300;
+            color: var(--deep-earth);
+            margin-bottom: 1rem;
+            letter-spacing: 2px;
+        }
+
+        .timer.warning {
+            color: var(--accent);
+            animation: pulse 1s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .start-button {
+            background: #6B9BD1;
+            color: white;
+            border: none;
+            padding: 1rem 3rem;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Public Sans', sans-serif;
+            letter-spacing: 0.5px;
+        }
+
+        .start-button:hover {
+            background: #5588c4;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(107, 155, 209, 0.4);
+        }
+
+        .start-button:disabled {
+            background: var(--warm-gray);
+            color: var(--soft-brown);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 300px;
+            padding: 1.5rem;
+            border: 3px solid #6B9BD1;
+            border-radius: 16px;
+            font-family: 'Crimson Pro', serif;
+            font-size: 1.125rem;
+            line-height: 1.8;
+            color: var(--deep-earth);
+            resize: vertical;
+            transition: border-color 0.3s ease;
+            background: white;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #5588c4;
+        }
+
+        textarea:disabled {
+            background: var(--warm-gray);
+            cursor: not-allowed;
+        }
+
+        .word-count {
+            text-align: right;
+            margin-top: 0.5rem;
+            font-size: 0.875rem;
+            color: var(--soft-brown);
+        }
+
+        .download-section {
+            margin-top: 2rem;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .download-section.visible {
+            opacity: 1;
+        }
+
+        .download-button {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Public Sans', sans-serif;
+        }
+
+        .download-button:hover {
+            background: var(--soft-brown);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(212, 165, 116, 0.4);
+        }
+
+        .complete-message {
+            font-family: 'Crimson Pro', serif;
+            font-size: 1.25rem;
+            color: var(--gentle-green);
+            margin-bottom: 1rem;
+        }
+
+        @media (max-width: 640px) {
+            .container {
+                padding: 2rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .timer {
+                font-size: 3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Let's write for 10 minutes today</h1>
+        
+        <div class="prompt-section">
+            <div class="prompt-label">Today's Writing Prompt</div>
+            <input 
+                type="text" 
+                id="promptInput" 
+                class="prompt-input" 
+                placeholder="Paste today's prompt here..."
+            />
+        </div>
+
+        <div class="timer-section">
+            <div class="timer" id="timer">10:00</div>
+            <button class="start-button" id="startButton">Start Writing</button>
+        </div>
+
+        <textarea 
+            id="writingArea" 
+            placeholder="Start writing here..."
+            disabled
+        ></textarea>
+        <div class="word-count" id="wordCount">0 / 5000 words</div>
+
+        <div class="download-section" id="downloadSection">
+            <div class="complete-message">Time's up! Great work today.</div>
+            <button class="download-button" id="downloadButton">Download Your Writing</button>
+        </div>
+    </div>
+
+    <script>
+        let timeRemaining = 600; // 10 minutes in seconds
+        let timerInterval = null;
+        let isTimerRunning = false;
+
+        const startButton = document.getElementById('startButton');
+        const writingArea = document.getElementById('writingArea');
+        const timerDisplay = document.getElementById('timer');
+        const wordCount = document.getElementById('wordCount');
+        const downloadSection = document.getElementById('downloadSection');
+        const downloadButton = document.getElementById('downloadButton');
+        const promptInput = document.getElementById('promptInput');
+
+        // Update timer display
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeRemaining / 60);
+            const seconds = timeRemaining % 60;
+            timerDisplay.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            
+            // Add warning class in last minute
+            if (timeRemaining <= 60) {
+                timerDisplay.classList.add('warning');
+            }
+        }
+
+        // Update word count
+        writingArea.addEventListener('input', () => {
+            const text = writingArea.value.trim();
+            const words = text === '' ? 0 : text.split(/\s+/).length;
+            wordCount.textContent = `${words} / 5000 words`;
+            
+            // Enforce 5000 word limit
+            if (words > 5000) {
+                const wordsArray = text.split(/\s+/);
+                writingArea.value = wordsArray.slice(0, 5000).join(' ');
+                wordCount.textContent = `5000 / 5000 words`;
+            }
+        });
+
+        // Start timer
+        function startTimer() {
+            if (isTimerRunning) return;
+            
+            isTimerRunning = true;
+            startButton.disabled = true;
+            writingArea.disabled = false;
+            writingArea.focus();
+
+            timerInterval = setInterval(() => {
+                timeRemaining--;
+                updateTimerDisplay();
+
+                if (timeRemaining <= 0) {
+                    endWritingSession();
+                }
+            }, 1000);
+        }
+
+        // End writing session
+        function endWritingSession() {
+            clearInterval(timerInterval);
+            writingArea.disabled = true;
+            downloadSection.classList.add('visible');
+            timerDisplay.textContent = '0:00';
+        }
+
+        // Update word count
+        writingArea.addEventListener('input', () => {
+            const length = writingArea.value.length;
+            wordCount.textContent = `${length} / 2000 characters`;
+        });
+
+        // Start button
+        startButton.addEventListener('click', startTimer);
+
+        // Download functionality
+        downloadButton.addEventListener('click', () => {
+            const text = writingArea.value;
+            const blob = new Blob([text], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            
+            const date = new Date().toISOString().split('T')[0];
+            a.href = url;
+            a.download = `writing-${date}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        });
+    </script>
+</body>
+</html>
